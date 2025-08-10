@@ -188,7 +188,7 @@ export const useArticlesStore = create<ArticlesState>((set, get) => ({
         set({ total, filtered });
     },
     initArticles: (articles: Article[]) => {
-        set({ articles });
+        set({ articles, authors: [...new Set(articles.map((a) => a.author))] });
         get().processArticles();
     },
 }));
