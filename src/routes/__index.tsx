@@ -5,13 +5,13 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { useArticlesStore } from "@/hooks/use-articles-store";
 import { useAuthStore } from "@/hooks/use-auth-store";
 import { data } from "@/lib/data";
-import { Outlet, createFileRoute } from "@tanstack/react-router";
+import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 import { useEffect } from "react";
 
 export const Route = createFileRoute("/__index")({
     beforeLoad: () => {
         if (!useAuthStore.getState().user) {
-            return { redirect: "/signin" };
+            throw redirect({ to: "/signin" });
         }
     },
     component: DashboardLayout,
