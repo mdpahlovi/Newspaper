@@ -1,3 +1,4 @@
+import { PerformanceChart } from "@/components/dashboard/performance-chart";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/__index/analytics")({
@@ -5,9 +6,5 @@ export const Route = createFileRoute("/__index/analytics")({
 });
 
 function Analytics() {
-    return (
-        <div className="p-2">
-            <h3>Analytics</h3>
-        </div>
-    );
+    return <PerformanceChart />;
 }
