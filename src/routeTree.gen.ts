@@ -9,48 +9,70 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as _indexRouteImport } from './routes/__index'
 import { Route as SigninRouteImport } from './routes/signin'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as _indexIndexRouteImport } from './routes/__index/index'
+import { Route as _indexAnalyticsRouteImport } from './routes/__index/analytics'
 
+const _indexRoute = _indexRouteImport.update({
+  id: '/__index',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SigninRoute = SigninRouteImport.update({
   id: '/signin',
   path: '/signin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const _indexIndexRoute = _indexIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => _indexRoute,
+} as any)
+const _indexAnalyticsRoute = _indexAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => _indexRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
   '/signin': typeof SigninRoute
+  '/analytics': typeof _indexAnalyticsRoute
+  '/': typeof _indexIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/signin': typeof SigninRoute
+  '/analytics': typeof _indexAnalyticsRoute
+  '/': typeof _indexIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/__index': typeof _indexRouteWithChildren
   '/signin': typeof SigninRoute
+  '/__index/analytics': typeof _indexAnalyticsRoute
+  '/__index/': typeof _indexIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/signin'
+  fullPaths: '/signin' | '/analytics' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/signin'
-  id: '__root__' | '/' | '/signin'
+  to: '/signin' | '/analytics' | '/'
+  id: '__root__' | '/__index' | '/signin' | '/__index/analytics' | '/__index/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  _indexRoute: typeof _indexRouteWithChildren
   SigninRoute: typeof SigninRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/__index': {
+      id: '/__index'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof _indexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/signin': {
       id: '/signin'
       path: '/signin'
@@ -58,18 +80,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SigninRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/__index/': {
+      id: '/__index/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof _indexIndexRouteImport
+      parentRoute: typeof _indexRoute
+    }
+    '/__index/analytics': {
+      id: '/__index/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof _indexAnalyticsRouteImport
+      parentRoute: typeof _indexRoute
     }
   }
 }
 
+interface _indexRouteChildren {
+  _indexAnalyticsRoute: typeof _indexAnalyticsRoute
+  _indexIndexRoute: typeof _indexIndexRoute
+}
+
+const _indexRouteChildren: _indexRouteChildren = {
+  _indexAnalyticsRoute: _indexAnalyticsRoute,
+  _indexIndexRoute: _indexIndexRoute,
+}
+
+const _indexRouteWithChildren =
+  _indexRoute._addFileChildren(_indexRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  _indexRoute: _indexRouteWithChildren,
   SigninRoute: SigninRoute,
 }
 export const routeTree = rootRouteImport

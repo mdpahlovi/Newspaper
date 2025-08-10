@@ -10,23 +10,28 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useAuthStore } from "@/hooks/use-auth-store";
 import { IconChartBar, IconDashboard, IconLogout } from "@tabler/icons-react";
+import { useLocation, useRouter } from "@tanstack/react-router";
 
 const data = [
     {
         title: "Dashboard",
-        url: "/",
+        to: "/",
         icon: IconDashboard,
-        selected: true,
     },
     {
         title: "Analytics",
-        url: "/analytics",
+        to: "/analytics",
         icon: IconChartBar,
     },
 ];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+    const router = useRouter();
+    const { signout } = useAuthStore();
+    const { pathname } = useLocation();
+
     return (
         <Sidebar collapsible="offcanvas" {...props}>
             <SidebarHeader>
@@ -44,7 +49,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                         <SidebarMenu>
                             {data.map((item) => (
                                 <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton tooltip={item.title}>
+                                    <SidebarMenuButton
+                                        tooltip={item.title}
+                                        selected={item.to === pathname}
+                                        onClick={() => router.navigate({ to: item.to })}
+                                    >
                                         {item.icon && <item.icon />}
                                         <span>{item.title}</span>
                                     </SidebarMenuButton>
@@ -57,7 +66,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarFooter>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton variant="destructive">
+                        <SidebarMenuButton
+                            variant="destructive"
+                            onClick={() => {
+                                signout();
+                                router.navigate({ to: "/signin" });
+                            }}
+                        >
                             <IconLogout />
                             <span>Sign out</span>
                         </SidebarMenuButton>
