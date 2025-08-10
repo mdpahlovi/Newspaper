@@ -1,4 +1,6 @@
+import { Toolbar } from "@/components/dashboard/toolbar";
 import { createFileRoute } from "@tanstack/react-router";
+import { ArticleTable } from "@/components/dashboard/article-table";
 
 export const Route = createFileRoute("/__index/")({
     component: Dashboard,
@@ -6,8 +8,9 @@ export const Route = createFileRoute("/__index/")({
 
 function Dashboard() {
     return (
-        <div className="p-2">
-            <h3>Welcome to your Dashboard!</h3>
-        </div>
+        <>
+            <Toolbar />
+            <ArticleTable />
+        </>
     );
 }

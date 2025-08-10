@@ -2,8 +2,11 @@ import { AppSidebar } from "@/components/dashboard/app-sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { useArticlesStore } from "@/hooks/use-articles-store";
 import { useAuthStore } from "@/hooks/use-auth-store";
+import { data } from "@/lib/data";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/__index")({
     beforeLoad: () => {
@@ -16,6 +19,12 @@ export const Route = createFileRoute("/__index")({
 
 function DashboardLayout() {
     const { user } = useAuthStore();
+    const { initArticles } = useArticlesStore();
+
+    useEffect(() => {
+        if (data?.length) initArticles(data);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <SidebarProvider
@@ -46,7 +55,7 @@ function DashboardLayout() {
                     </div>
                 </header>
                 <div className="flex flex-1 flex-col">
-                    <div className="@container/main flex flex-1 flex-col gap-2">
+                    <div className="@container/main flex flex-1 flex-col gap-4 p-4">
                         <Outlet />
                     </div>
                 </div>

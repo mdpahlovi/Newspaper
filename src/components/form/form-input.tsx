@@ -1,5 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "../ui/textarea";
 
 type FormInputProps = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -8,6 +9,7 @@ type FormInputProps = {
     name: string;
     label: string;
     placeholder?: string;
+    textarea?: boolean;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -21,7 +23,7 @@ function FieldError({ field }: { field: any }) {
     );
 }
 
-export function FormInput({ form, name, label, type = "text", placeholder }: FormInputProps) {
+export function FormInput({ form, name, label, type = "text", placeholder, textarea = false }: FormInputProps) {
     return (
         <form.Field
             name={name}
@@ -31,15 +33,26 @@ export function FormInput({ form, name, label, type = "text", placeholder }: For
                     <div className="mb-2 flex items-center">
                         <Label htmlFor={field.name}>{label}</Label>
                     </div>
-                    <Input
-                        id={field.name}
-                        type={type}
-                        name={field.name}
-                        value={field.state.value}
-                        onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
-                        placeholder={placeholder}
-                    />
+                    {textarea ? (
+                        <Textarea
+                            id={field.name}
+                            rows={6}
+                            value={field.state.value}
+                            onBlur={field.handleBlur}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            placeholder={placeholder}
+                        />
+                    ) : (
+                        <Input
+                            id={field.name}
+                            type={type}
+                            name={field.name}
+                            value={field.state.value}
+                            onBlur={field.handleBlur}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            placeholder={placeholder}
+                        />
+                    )}
                     <FieldError field={field} />
                 </div>
             )}
