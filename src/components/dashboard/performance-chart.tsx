@@ -55,7 +55,7 @@ export function PerformanceChart() {
                             <XAxis dataKey="label" tick={{ fontSize: 12 }} />
                             <YAxis tickFormatter={(v) => Intl.NumberFormat().format(v)} />
                             <Tooltip content={<ChartTooltipContent />} />
-                            <Line dataKey="views" />
+                            <Line dataKey="views" stroke="#FFFFFF" strokeWidth={2} dot={{ r: 6 }} activeDot={{ r: 8 }} />
                         </LineChart>
                     ) : (
                         <BarChart data={data}>
@@ -63,7 +63,7 @@ export function PerformanceChart() {
                             <XAxis dataKey="label" tick={{ fontSize: 12 }} />
                             <YAxis tickFormatter={(v) => Intl.NumberFormat().format(v)} />
                             <Tooltip content={<ChartTooltipContent />} />
-                            <Bar dataKey="views" />
+                            <Bar dataKey="views" fill="#FFFFFF" stroke="#FFFFFF" strokeWidth={2} radius={[4, 4, 0, 0]} />
                         </BarChart>
                     )}
                 </ResponsiveContainer>
